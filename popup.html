@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 250px;
+      padding: 16px;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 4px 0;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin: 0;
+      font-size: 12px;
+    }
+    
+    .toggle-section {
+      margin-bottom: 16px;
+    }
+    
+    .toggle-button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .toggle-button.enabled {
+      background-color: #e6d7ff;
+      color: #6b46c1;
+      border: 1px solid #9b6bb5;
+    }
+    
+    .toggle-button.disabled {
+      background-color: #f3f4f6;
+      color: #6b7280;
+      border: 1px solid #d1d5db;
+    }
+    
+    .toggle-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .status {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    
+    .status.enabled {
+      color: #6b46c1;
+    }
+    
+    .status.disabled {
+      color: #6b7280;
+    }
+    
+    .info {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 4px;
+      padding: 8px;
+      font-size: 11px;
+      color: #6c757d;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1 class="title">TrueSight</h1>
+    <p class="subtitle">Reveal hidden accessibility elements</p>
+  </div>
+  
+  <div class="toggle-section">
+    <button id="toggleButton" class="toggle-button disabled">
+      Enable TrueSight
+    </button>
+    <div id="status" class="status disabled">
+      Hidden elements are concealed
+    </div>
+  </div>
+  
+  <div class="info">
+    Reveals elements with the 'govuk-visually-hidden' class with a soft lilac background. Settings persist across page reloads.
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
