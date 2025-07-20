@@ -1,6 +1,29 @@
 // Track per-tab state
 const tabStates = new Map();
 
+// Helper function to inject content script
+const injectContentScript = async (tabId) => {
+  try {
+    const results = await chrome.scripting.executeScript({
+      target: { tabId },
+      func: () => window.trueSightInjected
+    });
+    
+    if (!results[0].result) {
+      await chrome.scripting.executeScript({
+        target: { tabId },
+        files: ['content.js']
+      });
+    }
+  } catch (error) {
+    // Content script not injected, inject it now
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      files: ['content.js']
+    });
+  }
+};
+
 const updateIcon = (tabId, enabled) => {
   const iconPath = enabled ? 'eye-open' : 'eye-closed';
   chrome.action.setIcon({
@@ -21,26 +44,8 @@ chrome.action.onClicked.addListener(async (tab) => {
   tabStates.set(tab.id, newState);
   updateIcon(tab.id, newState);
   
-  // Check if content script is already injected, if not inject it
-  try {
-    const results = await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      func: () => window.trueSightInjected
-    });
-    
-    if (!results[0].result) {
-      await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        files: ['content.js']
-      });
-    }
-  } catch (error) {
-    // Content script not injected, inject it now
-    await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      files: ['content.js']
-    });
-  }
+  // Inject content script
+  await injectContentScript(tab.id);
   
   // Send message to toggle
   chrome.tabs.sendMessage(tab.id, {
@@ -64,10 +69,7 @@ chrome.webNavigation.onCompleted.addListener(async (details) => {
   if (enabled) {
     // Re-inject content script and apply state
     try {
-      await chrome.scripting.executeScript({
-        target: { tabId: details.tabId },
-        files: ['content.js']
-      });
+      await injectContentScript(details.tabId);
       
       // Send message to apply the enabled state
       chrome.tabs.sendMessage(details.tabId, {

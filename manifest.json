@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "description": "Toggle visibility of govuk-visually-hidden elements",
   "permissions": [
-    "storage",
     "activeTab",
     "scripting",
     "webNavigation"

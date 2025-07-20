@@ -62,6 +62,12 @@ const applyTrueSight = (enabled) => {
   }
 };
 
+const revealElement = (element) => {
+  element.classList.remove('govuk-visually-hidden');
+  element.classList.add(CUSTOM_CLASS);
+  element.setAttribute('data-truesight-original', 'govuk-visually-hidden');
+};
+
 const observeNewElements = () => {
   if (!trueSightEnabled) return;
   
@@ -71,20 +77,16 @@ const observeNewElements = () => {
     mutations.forEach(mutation => {
       mutation.addedNodes.forEach(node => {
         if (node.nodeType === Node.ELEMENT_NODE) {
-          const hiddenElements = node.querySelectorAll ? 
-            node.querySelectorAll('.govuk-visually-hidden') : [];
-          
+          // Check if the node itself has the hidden class
           if (node.classList && node.classList.contains('govuk-visually-hidden')) {
-            node.classList.remove('govuk-visually-hidden');
-            node.classList.add(CUSTOM_CLASS);
-            node.setAttribute('data-truesight-original', 'govuk-visually-hidden');
+            revealElement(node);
           }
           
-          hiddenElements.forEach(element => {
-            element.classList.remove('govuk-visually-hidden');
-            element.classList.add(CUSTOM_CLASS);
-            element.setAttribute('data-truesight-original', 'govuk-visually-hidden');
-          });
+          // Check for hidden elements within the node
+          if (node.querySelectorAll) {
+            const hiddenElements = node.querySelectorAll('.govuk-visually-hidden');
+            hiddenElements.forEach(revealElement);
+          }
         }
       });
     });
@@ -115,6 +117,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// Content script no longer needs to check storage on load since it's injected on-demand
+// Content script is injected on-demand when extension is activated
 
 })();
