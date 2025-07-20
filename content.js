@@ -115,24 +115,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-chrome.storage.sync.get(['trueSightEnabled']).then(result => {
-  const enabled = result.trueSightEnabled || false;
-  applyTrueSight(enabled);
-  
-  if (enabled) {
-    observer = observeNewElements();
-  }
-});
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    chrome.storage.sync.get(['trueSightEnabled']).then(result => {
-      const enabled = result.trueSightEnabled || false;
-      if (enabled) {
-        setTimeout(() => applyTrueSight(enabled), 100);
-      }
-    });
-  });
-}
+// Content script no longer needs to check storage on load since it's injected on-demand
 
 })();

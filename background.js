@@ -1,16 +1,10 @@
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set({ trueSightEnabled: false });
-});
+// Track per-tab state
+const tabStates = new Map();
 
-chrome.action.onClicked.addListener(async (tab) => {
-  const result = await chrome.storage.sync.get(['trueSightEnabled']);
-  const newState = !result.trueSightEnabled;
-  
-  await chrome.storage.sync.set({ trueSightEnabled: newState });
-  
-  // Update icon based on state
-  const iconPath = newState ? 'eye-open' : 'eye-closed';
+const updateIcon = (tabId, enabled) => {
+  const iconPath = enabled ? 'eye-open' : 'eye-closed';
   chrome.action.setIcon({
+    tabId: tabId,
     path: {
       "16": `icons/${iconPath}-16.png`,
       "32": `icons/${iconPath}-32.png`,
@@ -18,6 +12,14 @@ chrome.action.onClicked.addListener(async (tab) => {
       "128": `icons/${iconPath}-128.png`
     }
   });
+};
+
+chrome.action.onClicked.addListener(async (tab) => {
+  const currentState = tabStates.get(tab.id) || false;
+  const newState = !currentState;
+  
+  tabStates.set(tab.id, newState);
+  updateIcon(tab.id, newState);
   
   // Check if content script is already injected, if not inject it
   try {
@@ -45,4 +47,15 @@ chrome.action.onClicked.addListener(async (tab) => {
     action: 'toggleTrueSight',
     enabled: newState
   });
+});
+
+// Update icon when switching tabs
+chrome.tabs.onActivated.addListener((activeInfo) => {
+  const enabled = tabStates.get(activeInfo.tabId) || false;
+  updateIcon(activeInfo.tabId, enabled);
+});
+
+// Clean up tab state when tab is closed
+chrome.tabs.onRemoved.addListener((tabId) => {
+  tabStates.delete(tabId);
 });
