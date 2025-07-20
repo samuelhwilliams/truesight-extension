@@ -18,6 +18,12 @@ const injectCSS = () => {
   style.textContent = `
     .${CUSTOM_CLASS} {
       background-color: #e6d7ff;
+      transition: background-color 0.3s ease-in-out;
+    }
+    
+    .truesight-fading-out {
+      background-color: transparent;
+      transition: background-color 0.3s ease-in-out;
     }
     
     #${NOTIFICATION_ID} {
@@ -115,17 +121,25 @@ const applyTrueSight = (enabled) => {
     injectCSS();
     toggleElements(true);
   } else {
-    toggleElements(false);
-    // Don't remove CSS immediately - keep it for notifications
-    // Only remove the revealed element styles
+    // Start fade-out transition first
     const revealedElements = document.querySelectorAll(`.${CUSTOM_CLASS}`);
     revealedElements.forEach(element => {
       if (element.getAttribute('data-truesight-original') === 'govuk-visually-hidden') {
+        element.classList.add('truesight-fading-out');
         element.classList.remove(CUSTOM_CLASS);
-        element.classList.add('govuk-visually-hidden');
-        element.removeAttribute('data-truesight-original');
       }
     });
+    
+    // After transition completes, hide elements
+    setTimeout(() => {
+      revealedElements.forEach(element => {
+        if (element.getAttribute('data-truesight-original') === 'govuk-visually-hidden') {
+          element.classList.remove('truesight-fading-out');
+          element.classList.add('govuk-visually-hidden');
+          element.removeAttribute('data-truesight-original');
+        }
+      });
+    }, 300); // Match CSS transition duration
   }
 };
 
