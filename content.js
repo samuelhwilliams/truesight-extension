@@ -10,20 +10,7 @@ const injectCSS = () => {
   style.id = CSS_ID;
   style.textContent = `
     .${CUSTOM_CLASS} {
-      background-color: #e6d7ff !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-      position: static !important;
-      width: auto !important;
-      height: auto !important;
-      clip: auto !important;
-      overflow: visible !important;
-      white-space: normal !important;
-      border: 1px solid #9b6bb5 !important;
-      padding: 2px 4px !important;
-      margin: 1px !important;
-      font-size: 12px !important;
-      line-height: 1.2 !important;
+      background-color: #e6d7ff;
     }
   `;
   document.head.appendChild(style);
