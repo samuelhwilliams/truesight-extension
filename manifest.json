@@ -5,26 +5,19 @@
   "description": "Toggle visibility of govuk-visually-hidden elements",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "scripting"
   ],
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "run_at": "document_end"
-    }
-  ],
   "action": {
-    "default_popup": "popup.html",
     "default_title": "TrueSight - Toggle Hidden Elements",
     "default_icon": {
-      "16": "icons/icon-16.png",
-      "32": "icons/icon-32.png",
-      "48": "icons/icon-48.png",
-      "128": "icons/icon-128.png"
+      "16": "icons/eye-closed-16.png",
+      "32": "icons/eye-closed-32.png",
+      "48": "icons/eye-closed-48.png",
+      "128": "icons/eye-closed-128.png"
     }
   },
   "icons": {

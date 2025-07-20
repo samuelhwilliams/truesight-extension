@@ -1,3 +1,9 @@
+(function() {
+  if (window.trueSightInjected) {
+    return;
+  }
+  window.trueSightInjected = true;
+
 let trueSightEnabled = false;
 
 const CSS_ID = 'truesight-styles';
@@ -128,3 +134,5 @@ if (document.readyState === 'loading') {
     });
   });
 }
+
+})();
