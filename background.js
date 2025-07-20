@@ -47,10 +47,15 @@ chrome.action.onClicked.addListener(async (tab) => {
   // Inject content script
   await injectContentScript(tab.id);
   
-  // Send message to toggle
+  // Send message to toggle with notification
+  const notificationMessage = newState 
+    ? 'GOV.UK hidden elements revealed' 
+    : 'GOV.UK hidden elements re-hidden';
+    
   chrome.tabs.sendMessage(tab.id, {
     action: 'toggleTrueSight',
-    enabled: newState
+    enabled: newState,
+    notification: notificationMessage
   });
 });
 
@@ -71,7 +76,7 @@ chrome.webNavigation.onCompleted.addListener(async (details) => {
     try {
       await injectContentScript(details.tabId);
       
-      // Send message to apply the enabled state
+      // Send message to apply the enabled state (no notification on navigation)
       chrome.tabs.sendMessage(details.tabId, {
         action: 'toggleTrueSight',
         enabled: true
