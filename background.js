@@ -55,6 +55,34 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
   updateIcon(activeInfo.tabId, enabled);
 });
 
+// Re-inject content script on navigation if tab state is enabled
+chrome.webNavigation.onCompleted.addListener(async (details) => {
+  // Only handle main frame navigations (not iframes)
+  if (details.frameId !== 0) return;
+  
+  const enabled = tabStates.get(details.tabId);
+  if (enabled) {
+    // Re-inject content script and apply state
+    try {
+      await chrome.scripting.executeScript({
+        target: { tabId: details.tabId },
+        files: ['content.js']
+      });
+      
+      // Send message to apply the enabled state
+      chrome.tabs.sendMessage(details.tabId, {
+        action: 'toggleTrueSight',
+        enabled: true
+      });
+      
+      // Update icon to reflect state
+      updateIcon(details.tabId, true);
+    } catch (error) {
+      // Tab might be closed or navigation cancelled
+    }
+  }
+});
+
 // Clean up tab state when tab is closed
 chrome.tabs.onRemoved.addListener((tabId) => {
   tabStates.delete(tabId);
