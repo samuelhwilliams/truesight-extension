@@ -1,8 +1,8 @@
 # <img src="icons/eye-open.svg" alt="Open Eye" width="32" height="32" style="vertical-align: text-bottom;"> TrueSight Browser Extension
 
-Fully vibe coded.
+Almost fully vibe coded.
 
-TrueSight is a browser extension that toggles the visibility of GOV.UK accessibility elements (elements with the `govuk-visually-hidden` class) to help developers and designers understand what screen readers and other assistive technologies experience on a page.
+TrueSight is a browser extension that toggles the visibility of GOV.UK visually-hidden elements to help developers and designers understand what screen readers and other assistive technologies experience on a page.
 
 ## Features
 
@@ -59,9 +59,7 @@ TrueSight specifically targets elements with the `govuk-visually-hidden` CSS cla
 - Important for accessibility compliance
 
 Examples include:
-- Skip links
 - Form labels and hints
-- Status messages
 - Additional context for interactive elements
 
 ## Technical Details
